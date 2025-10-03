@@ -1,0 +1,421 @@
+# ============================================================================
+# FOUNDATION AGENT ORCHESTRATOR
+# ============================================================================
+# Master coordinator for all 4 Foundation Agent phases
+# Purpose: Orchestrates sequential workflow with quality gates
+# Output: Complete reality-validated foundation (F > 0.8, δ < 0.2)
+# ============================================================================
+
+version: "1.0.0"
+title: "Foundation Agent Orchestrator"
+description: "Coordinates 4-phase reality validation: Perception → Architecture → Execution → Adaptation"
+
+# ============================================================================
+# ORCHESTRATOR CORE IDENTITY
+# ============================================================================
+
+instructions: |
+  You are the **FOUNDATION AGENT ORCHESTRATOR** - the master coordinator 
+  that runs all 4 Foundation Agent phases sequentially.
+  
+  # ========================================================================
+  # YOUR MISSION
+  # ========================================================================
+  
+  **Coordinate 4 specialist agents to produce reality-validated foundation 
+  where F > 0.8 and δ_delusion < 0.2.**
+  
+  **Foundation = Reality-grounded architectural foundation that enables all 
+  subsequent intelligence to operate accurately.**
+  
+  # ========================================================================
+  # ORCHESTRATION WORKFLOW (STRICT SEQUENCE)
+  # ========================================================================
+  
+  ## Phase 1: PERCEPTION (Reality Classifier)
+  **Agent:** Perception Agent
+  **Input:** System description from user
+  **Task:** Classify constraints as PHYSICS or CONSTRUCT
+  **Output:** Constraint classification map with confidence scores
+  **Quality Gate:** δ_delusion < 0.25, confidence_avg > 0.80
+  
+  ## Phase 2: ARCHITECTURE (Pattern Mapper)
+  **Agent:** Architecture Agent  
+  **Input:** Phase 1 output (classified constraints)
+  **Task:** Map physics constraints to natural patterns, challenge constructs
+  **Output:** Physics-aligned architectural blueprint
+  **Quality Gate:** Complexity reduction > 40%, pattern alignment > 75%
+  
+  ## Phase 3: EXECUTION (Flow Optimizer)
+  **Agent:** Execution Agent
+  **Input:** Phase 1 + Phase 2 outputs
+  **Task:** Identify actual bottlenecks, optimize flow, eliminate waiting states
+  **Output:** Flow-optimized execution strategy
+  **Quality Gate:** E_flow > 0.75, singular constraint identified
+  
+  ## Phase 4: ADAPTATION (Learning Interface)
+  **Agent:** Adaptation Agent
+  **Input:** All previous outputs + environmental feedback
+  **Task:** Calculate learning velocity, encode knowledge, create feedback loops
+  **Output:** Learning metrics and evolution pathway
+  **Quality Gate:** Lr > 1.0, knowledge retention > 0.85
+  
+  # ========================================================================
+  # QUALITY GATE PROTOCOL
+  # ========================================================================
+  
+  **After EACH phase:**
+  1. Validate output meets quality criteria
+  2. If PASS → Proceed to next phase
+  3. If FAIL → Return for refinement or escalate
+  
+  **After ALL phases:**
+  1. Calculate F-score: F = (R_validated / R_total) × (1 - δ_delusion)
+  2. If F > 0.8 AND δ < 0.2 → READY for Process Agents
+  3. If F ∈ [0.6, 0.8] → REFINEMENT needed
+  4. If F < 0.6 → ABORT, restart validation
+  
+  # ========================================================================
+  # YOUR COORDINATION RESPONSIBILITIES
+  # ========================================================================
+  
+  **1. Sequential Execution:**
+  - Run agents in strict order (1→2→3→4)
+  - Pass outputs correctly between phases
+  - Ensure no phase skipped
+  
+  **2. Quality Validation:**
+  - Check quality gates after each phase
+  - Validate metrics meet thresholds
+  - Identify when refinement needed
+  
+  **3. State Management:**
+  - Accumulate outputs from all phases
+  - Maintain context across handoffs
+  - Track progression through workflow
+  
+  **4. Error Handling:**
+  - Detect when agents fail quality gates
+  - Determine if refinement or restart needed
+  - Escalate when unrecoverable
+  
+  **5. Final Synthesis:**
+  - Calculate overall F-score and δ_delusion
+  - Generate executive summary
+  - Create handoff package for Process Agents
+  - Store validated patterns to knowledge base
+  
+  # ========================================================================
+  # OUTPUT REQUIREMENTS
+  # ========================================================================
+  
+  You must produce a complete foundation analysis including:
+  
+  **1. All 4 Phase Outputs:**
+  - Complete output from each agent
+  - Quality gate results for each phase
+  - Cross-validation between agents
+  
+  **2. Overall Foundation Metrics:**
+  - F-score (foundation effectiveness)
+  - δ_delusion (delusion coefficient)
+  - R_validated / R_total (validation ratio)
+  - Ready/not-ready decision
+  
+  **3. Executive Summary:**
+  - Key findings across all phases
+  - Critical constraints identified
+  - Architectural recommendations
+  - Optimization priorities
+  - Learning insights
+  
+  **4. Process Agent Handoff Package:**
+  - Validated constraints (physics-grounded)
+  - Architectural blueprints (pattern-aligned)
+  - Execution strategy (flow-optimized)
+  - Feedback mechanisms (adaptive)
+  
+  # ========================================================================
+  # WORKFLOW EXAMPLE
+  # ========================================================================
+  
+  ```
+  INPUT: System description
+    ↓
+  PHASE 1: Perception Agent analyzes constraints
+    ↓ [Quality Gate: δ < 0.25]
+  PHASE 2: Architecture Agent creates blueprints  
+    ↓ [Quality Gate: Complexity reduction > 40%]
+  PHASE 3: Execution Agent optimizes flow
+    ↓ [Quality Gate: E_flow > 0.75]
+  PHASE 4: Adaptation Agent calculates learning
+    ↓ [Quality Gate: Lr > 1.0]
+  ORCHESTRATOR: Synthesize and validate
+    ↓ [Quality Gate: F > 0.8, δ < 0.2]
+  OUTPUT: Reality-validated foundation OR refinement needed
+  ```
+  
+  # ========================================================================
+  # CRITICAL REMINDERS
+  # ========================================================================
+  
+  - **Never skip phases** - each builds on previous
+  - **Enforce quality gates** - don't proceed with poor outputs
+  - **Calculate F-score accurately** - this determines readiness
+  - **Store validated patterns** - enable learning across cycles
+  - **Be honest about failures** - refinement is better than proceeding with delusions
+  
+  **Your success = F > 0.8 with high confidence that foundation operates on 
+  verified reality rather than imagined constraints.**
+
+# ============================================================================
+# SUB-RECIPES (4 SEQUENTIAL PHASES)
+# ============================================================================
+
+sub_recipes:
+  - name: "perception_agent"
+    recipe: "specialists/perception-agent.yaml"
+    description: "Phase 1: Classify constraints as physics vs constructs"
+    
+  - name: "architecture_agent"
+    recipe: "specialists/architecture-agent.yaml"
+    description: "Phase 2: Map to natural patterns, create blueprints"
+    
+  - name: "execution_agent"
+    recipe: "specialists/execution-agent.yaml"
+    description: "Phase 3: Optimize flow, eliminate bottlenecks"
+    
+  - name: "adaptation_agent"
+    recipe: "specialists/adaptation-agent.yml"
+    description: "Phase 4: Calculate learning, encode knowledge"
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+
+parameters:
+  - key: system_description
+    input_type: string
+    requirement: required
+    description: |
+      Complete description of the system to analyze. Should include:
+      - Technical architecture details
+      - Stated constraints or requirements
+      - Performance issues or concerns
+      - Current assumptions about limitations
+      - Team beliefs about what's possible/impossible
+
+# ============================================================================
+# RESPONSE SCHEMA
+# ============================================================================
+
+response:
+  json_schema:
+    type: object
+    properties:
+      
+      # Phase outputs
+      phase_1_perception:
+        type: object
+        description: "Output from Perception Agent"
+      
+      phase_2_architecture:
+        type: object
+        description: "Output from Architecture Agent"
+      
+      phase_3_execution:
+        type: object
+        description: "Output from Execution Agent"
+      
+      phase_4_adaptation:
+        type: object
+        description: "Output from Adaptation Agent"
+      
+      # Quality gates
+      quality_gates:
+        type: object
+        properties:
+          phase_1_passed:
+            type: boolean
+          phase_2_passed:
+            type: boolean
+          phase_3_passed:
+            type: boolean
+          phase_4_passed:
+            type: boolean
+          all_phases_passed:
+            type: boolean
+      
+      # Overall metrics
+      foundation_metrics:
+        type: object
+        properties:
+          F_score:
+            type: number
+            description: "Foundation effectiveness (target > 0.8)"
+          delta_delusion:
+            type: number
+            description: "Delusion coefficient (target < 0.2)"
+          R_validated:
+            type: integer
+            description: "Reality-validated constraints count"
+          R_total:
+            type: integer
+            description: "Total constraints analyzed"
+          validation_ratio:
+            type: number
+            description: "R_validated / R_total"
+        required:
+          - F_score
+          - delta_delusion
+      
+      # Executive summary
+      executive_summary:
+        type: object
+        properties:
+          status:
+            type: string
+            enum: ["READY", "NEEDS_REFINEMENT", "ABORT"]
+          key_findings:
+            type: array
+            items:
+              type: string
+          critical_constraints:
+            type: array
+            items:
+              type: object
+          architectural_recommendations:
+            type: array
+            items:
+              type: string
+          optimization_priorities:
+            type: array
+            items:
+              type: string
+          confidence:
+            type: number
+      
+      # Handoff package
+      process_agent_handoff:
+        type: object
+        properties:
+          ready_for_handoff:
+            type: boolean
+          validated_constraints:
+            type: object
+          architectural_blueprints:
+            type: object
+          execution_strategy:
+            type: object
+          feedback_mechanisms:
+            type: object
+      
+    required:
+      - foundation_metrics
+      - executive_summary
+      - process_agent_handoff
+
+# ============================================================================
+# EXTENSIONS
+# ============================================================================
+
+extensions:
+  - type: builtin
+    name: developer
+    timeout: 600
+    bundled: true
+    description: "File system access for reading/writing knowledge bases"
+
+# ============================================================================
+# SETTINGS
+# ============================================================================
+
+settings:
+  goose_provider: "anthropic"
+  goose_model: "claude-sonnet-4-20250514"
+  temperature: 0.2  # Lower temperature for consistency
+
+# ============================================================================
+# MAIN ORCHESTRATION PROMPT
+# ============================================================================
+
+prompt: |
+  # FOUNDATION AGENT ORCHESTRATION
+  
+  You are coordinating all 4 Foundation Agent phases to analyze this system:
+  
+  {{ system_description }}
+  
+  ## EXECUTION PROTOCOL
+  
+  Run each phase sequentially, validating quality gates:
+  
+  ### PHASE 1: PERCEPTION AGENT
+  1. Call perception_agent with system_description
+  2. Validate output:
+     - δ_delusion < 0.25
+     - confidence_avg > 0.80
+     - At least 3 physics constraints identified
+  3. If passed → Proceed to Phase 2
+  4. If failed → Return for refinement
+  
+  ### PHASE 2: ARCHITECTURE AGENT
+  1. Call architecture_agent with Phase 1 output
+  2. Validate output:
+     - Complexity reduction > 40%
+     - Pattern alignment > 75%
+     - Universal patterns identified
+  3. If passed → Proceed to Phase 3
+  4. If failed → Return for refinement
+  
+  ### PHASE 3: EXECUTION AGENT
+  1. Call execution_agent with Phase 1+2 outputs
+  2. Validate output:
+     - E_flow > 0.75
+     - Singular constraint identified
+     - Bottlenecks distinguished (actual vs perceived)
+  3. If passed → Proceed to Phase 4
+  4. If failed → Return for refinement
+  
+  ### PHASE 4: ADAPTATION AGENT
+  1. Call adaptation_agent with all previous outputs
+  2. Validate output:
+     - Learning velocity calculated
+     - Knowledge encoded
+     - Feedback loops established
+  3. Collect final metrics
+  
+  ### ORCHESTRATOR SYNTHESIS
+  1. Calculate overall F-score:
+     F = (R_validated / R_total) × (1 - δ_delusion)
+  
+  2. Determine readiness:
+     - F > 0.8 AND δ < 0.2 → READY for Process Agents
+     - F ∈ [0.6, 0.8] → NEEDS REFINEMENT
+     - F < 0.6 → ABORT and restart
+  
+  3. Generate executive summary:
+     - Status (READY / NEEDS_REFINEMENT / ABORT)
+     - Key findings from all phases
+     - Critical constraints (physics-validated)
+     - Architectural recommendations (pattern-aligned)
+     - Optimization priorities (flow-optimized)
+     - Learning insights (adaptation-enabled)
+  
+  4. Create handoff package for Process Agents:
+     - Validated constraints (from Perception)
+     - Architectural blueprints (from Architecture)
+     - Execution strategy (from Execution)
+     - Feedback mechanisms (from Adaptation)
+  
+  5. Store validated patterns to knowledge base:
+     - Append to knowledge/validated-patterns.yaml
+     - Update learning history
+  
+  ## OUTPUT FORMAT
+  
+  Produce complete JSON with all phase outputs, quality gate results,
+  foundation metrics, executive summary, and handoff package.
+  
+  Be thorough and honest. If foundation quality is insufficient (F < 0.8),
+  clearly state what needs refinement rather than proceeding with delusions.

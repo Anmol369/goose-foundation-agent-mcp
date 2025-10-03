@@ -1,0 +1,336 @@
+# ============================================================================
+# PHYSICS LAWS DATABASE
+# ============================================================================
+# Actual physical constraints that cannot be negotiated away
+# Last Updated: 2025-10-01
+# Purpose: Reference data for constraint classification
+# ============================================================================
+
+version: "1.0"
+description: "Physical constraints governing information systems"
+
+# ============================================================================
+# NETWORK & COMMUNICATION PHYSICS
+# ============================================================================
+
+network_physics:
+  speed_of_light:
+    value: "299,792,458 m/s"
+    practical_limit: "~300,000 km/s in vacuum, ~200,000 km/s in fiber"
+    implications:
+      - "1ms latency per 300km distance (one-way)"
+      - "Round-trip doubles this: 2ms per 300km"
+      - "NYC to London: ~5,600km = ~37ms minimum latency"
+      - "Cannot be optimized away, only worked around"
+      - "Fundamental limit for all electromagnetic signals"
+    workarounds:
+      - "Data locality (move computation closer to data)"
+      - "Edge computing (distribute processing geographically)"
+      - "Caching (reduce need for round trips)"
+      - "Async processing (don't wait for distant responses)"
+    
+  shannon_limit:
+    formula: "C = B × log₂(1 + SNR)"
+    description: "Maximum data rate through a noisy channel"
+    practical_meaning:
+      - "Bandwidth has theoretical maximum based on signal-to-noise ratio"
+      - "Cannot transmit infinite data through finite bandwidth"
+      - "Noise fundamentally limits information transfer"
+    implications:
+      - "Compression has limits (cannot compress below entropy)"
+      - "More bandwidth requires more spectrum or better SNR"
+      - "Error correction adds overhead but necessary in noisy channels"
+    typical_values:
+      wifi_2_4ghz: "~450 Mbps theoretical, ~150 Mbps practical"
+      fiber_optic: "~100 Gbps per wavelength in DWDM"
+      4g_lte: "~100 Mbps theoretical, ~20 Mbps practical"
+  
+  network_congestion:
+    physics_basis: "Queueing theory + packet collision"
+    manifestation:
+      - "Buffers fill when arrival rate > service rate"
+      - "Packet loss occurs when buffers overflow"
+      - "Latency increases linearly with queue depth"
+    practical_limits:
+      bufferbloat: "Excessive buffering adds 100ms-1000ms latency"
+      congestion_collapse: "Network throughput drops to near-zero"
+    
+  tcp_overhead:
+    physics_basis: "Reliability requires acknowledgment"
+    minimum_overhead:
+      handshake: "3-way handshake = 1.5 RTT before data transfer"
+      headers: "20-40 bytes per packet (vs 1460 byte payload)"
+      ack_packets: "Every ~2 data packets require 1 ACK packet"
+    implications:
+      - "Small frequent messages = high overhead percentage"
+      - "Batching improves efficiency (amortizes fixed costs)"
+      - "UDP avoids overhead but requires application-level reliability"
+
+# ============================================================================
+# COMPUTATION PHYSICS
+# ============================================================================
+
+computation_physics:
+  thermal_dynamics:
+    fundamental_limit: "Landauer's principle: kT ln(2) per bit erased"
+    practical_limit: "~3-5 GHz for silicon CPUs due to heat dissipation"
+    power_density: "~100 W/cm² for modern CPUs"
+    implications:
+      - "Clock speed plateaued around 2005 due to thermal limits"
+      - "More cores > higher frequency (Amdahl's Law applies)"
+      - "Cooling costs scale exponentially with clock speed"
+      - "Power consumption grows with voltage squared"
+    cooling_reality:
+      air_cooling: "Adequate up to ~150W TDP"
+      liquid_cooling: "Required for 200W+ sustained loads"
+      data_center: "40-50% of power goes to cooling"
+  
+  memory_hierarchy:
+    access_times:
+      l1_cache: "~1 ns (CPU registers: ~0.5ns)"
+      l2_cache: "~3-10 ns"
+      l3_cache: "~10-20 ns"
+      main_ram: "~100 ns"
+      ssd: "~100 μs (100,000 ns)"
+      hdd: "~10 ms (10,000,000 ns)"
+      network_storage: "~1-100 ms depending on distance"
+    
+    magnitude_gaps:
+      l1_to_ram: "100× slower"
+      ram_to_ssd: "1,000× slower"
+      ssd_to_hdd: "100× slower"
+      local_to_network: "10-1000× slower"
+    
+    capacity_vs_speed_tradeoff:
+      principle: "Faster storage is exponentially more expensive per byte"
+      l1_cache: "~32-64 KB per core (~$1000/MB equivalent)"
+      ram: "~16-128 GB typical (~$5/GB)"
+      ssd: "~500GB-4TB typical (~$0.10/GB)"
+      hdd: "~2-20TB typical (~$0.02/GB)"
+    
+    implications:
+      - "Data locality is critical (6+ orders of magnitude difference)"
+      - "Cache misses have massive performance impact"
+      - "Working set must fit in cache for optimal performance"
+      - "Random access kills HDD performance (seek time dominates)"
+  
+  cpu_parallelism_limits:
+    amdahls_law: "Speedup = 1 / ((1-P) + P/N)"
+    practical_meaning:
+      - "If 50% of code is serial, max speedup = 2× no matter how many cores"
+      - "If 95% parallel, max speedup = 20× with infinite cores"
+      - "Parallelization has diminishing returns"
+    
+    coordination_overhead:
+      cache_coherency: "Synchronizing CPU caches costs cycles"
+      lock_contention: "Multiple threads waiting for locks = wasted CPU"
+      context_switching: "OS switching between threads ~1-10μs per switch"
+    
+    implications:
+      - "Not all problems benefit from more cores"
+      - "Coordination overhead can make parallel code slower"
+      - "Embarrassingly parallel problems scale best"
+
+# ============================================================================
+# STORAGE PHYSICS
+# ============================================================================
+
+storage_physics:
+  mechanical_hdd:
+    rotational_latency: "~4-8ms (depends on RPM: 5400-15000)"
+    seek_time: "~5-10ms (mechanical arm movement)"
+    total_latency: "~10-15ms for random access"
+    sequential_throughput: "~100-200 MB/s"
+    random_iops: "~100-200 IOPS"
+    
+    physics_basis: "Physical disk platter rotation + mechanical arm"
+    cannot_be_improved: "Mechanical physics constrains performance"
+    
+  solid_state_ssd:
+    read_latency: "~50-100 μs"
+    write_latency: "~100-500 μs (due to erase-before-write)"
+    sequential_throughput: "~500-7000 MB/s (SATA to NVMe)"
+    random_iops: "~50,000-1,000,000 IOPS"
+    
+    physics_basis: "Electronic charge storage in flash cells"
+    wear_limitation: "Finite write cycles (~1,000-100,000 per cell)"
+    write_amplification: "Writing small amounts may rewrite large blocks"
+    
+  write_ahead_logging:
+    physics_basis: "Durability requires data hit persistent storage"
+    fsync_cost: "Forces OS to flush write cache to disk (~1-10ms)"
+    implications:
+      - "Transactional systems pay latency cost for durability"
+      - "Batching writes improves throughput"
+      - "Async replication trades consistency for performance"
+
+# ============================================================================
+# HUMAN COGNITIVE PHYSICS
+# ============================================================================
+
+human_cognition:
+  working_memory:
+    capacity: "7 ± 2 chunks (Miller's Law)"
+    duration: "~20-30 seconds without rehearsal"
+    implications:
+      - "UI complexity limited by working memory capacity"
+      - "Too many simultaneous elements = cognitive overload"
+      - "Chunking/grouping information aids comprehension"
+      - "Progressive disclosure reduces cognitive load"
+    
+  visual_attention:
+    focus: "~1° of visual field in sharp focus (foveal vision)"
+    peripheral: "~10° for context, decreasing acuity beyond"
+    implications:
+      - "Important information must be in visual focus area"
+      - "Eye tracking shows users don't see everything on screen"
+      - "F-pattern reading (users scan, don't read everything)"
+  
+  response_time_perception:
+    instantaneous: "<100ms (feels immediate)"
+    responsive: "100-300ms (perceptible but acceptable)"
+    sluggish: "300ms-1s (user notices delay)"
+    unacceptable: ">1s (user attention wanders)"
+    
+    source: "Card, Moran & Newell (1983) - Human information processing"
+    implications:
+      - "UI feedback must occur <100ms for 'instant' feel"
+      - "Loading indicators needed for >300ms operations"
+      - "Background processing for >1s operations"
+  
+  decision_fatigue:
+    principle: "Each decision depletes cognitive resources"
+    implications:
+      - "Too many choices = paralysis or poor decisions"
+      - "Default values reduce decision burden"
+      - "Progressive decision-making (wizards) aids complex tasks"
+    
+  reading_comprehension:
+    optimal_line_length: "50-75 characters per line"
+    reading_speed: "~200-300 words per minute (technical content slower)"
+    implications:
+      - "Dense text walls reduce comprehension"
+      - "White space improves readability"
+      - "Scannable headings aid navigation"
+
+# ============================================================================
+# INFORMATION THEORY PHYSICS
+# ============================================================================
+
+information_theory:
+  entropy_limit:
+    principle: "Cannot compress data below its entropy"
+    formula: "H(X) = -Σ p(x)log₂p(x)"
+    practical_meaning:
+      - "Random data is incompressible"
+      - "Already-compressed data won't compress further"
+      - "Lossless compression has theoretical limits"
+    
+  error_detection_cost:
+    principle: "Detecting errors requires redundancy"
+    checksum: "~1-4% overhead (CRC32, MD5)"
+    error_correction: "~10-50% overhead (Reed-Solomon, LDPC)"
+    implications:
+      - "Reliability costs bandwidth/storage"
+      - "Trade-off between overhead and error detection capability"
+  
+  search_complexity:
+    unsorted_data: "O(n) - must check every element"
+    sorted_data: "O(log n) - binary search possible"
+    hash_table: "O(1) average - requires extra space"
+    implications:
+      - "Data structure choice affects performance fundamentally"
+      - "No algorithm can search unsorted data faster than O(n)"
+      - "Space-time tradeoffs are inherent"
+
+# ============================================================================
+# DISTRIBUTED SYSTEMS PHYSICS
+# ============================================================================
+
+distributed_systems:
+  cap_theorem:
+    principle: "Can only guarantee 2 of 3: Consistency, Availability, Partition-tolerance"
+    physics_basis: "Network partitions are inevitable (cables break, routers fail)"
+    implications:
+      - "Must choose: CP (consistent but unavailable during partition)"
+      - "Or AP (available but potentially inconsistent during partition)"
+      - "Cannot have all three simultaneously"
+    
+  two_generals_problem:
+    principle: "Cannot achieve consensus over unreliable channel with 100% certainty"
+    implication: "Distributed consensus requires timeouts and retries"
+    
+  consensus_algorithms:
+    raft_paxos: "Requires majority (n/2 + 1) for consensus"
+    latency_cost: "Minimum 2× network RTT for each consensus round"
+    implications:
+      - "Strong consistency is expensive (latency + coordination)"
+      - "Eventual consistency trades correctness for performance"
+
+# ============================================================================
+# ENERGY PHYSICS
+# ============================================================================
+
+energy_physics:
+  computation_energy:
+    cpu_typical: "65-125W TDP for server CPUs"
+    gpu_compute: "250-450W for high-performance GPUs"
+    data_transmission: "~0.5-1W per GB transmitted (network equipment)"
+    
+  battery_limits:
+    smartphone: "~15-20 Wh (3000-4000 mAh @ 3.7V)"
+    laptop: "~50-100 Wh typical"
+    physics_basis: "Lithium-ion energy density ~250 Wh/kg"
+    charging_time: "Minimum ~1 hour due to heat generation during fast charge"
+    
+  power_efficiency_tradeoffs:
+    principle: "Performance per watt has physical limits"
+    mobile_vs_server: "Mobile CPUs ~10× less powerful for same power budget"
+    implications:
+      - "Mobile applications must be more efficient"
+      - "Cloud offloading trades network for computation"
+
+# ============================================================================
+# RENDERING & DISPLAY PHYSICS
+# ============================================================================
+
+display_physics:
+  frame_rate_perception:
+    smooth_motion: "60 fps minimum (16.67ms per frame)"
+    vr_comfort: "90 fps minimum (11.11ms per frame)"
+    competitive_gaming: "144-240 fps preferred
+    physics_basis: "Human flicker fusion threshold ~50-60 Hz"
+    
+  pixel_response:
+    lcd: "5-10ms pixel transition time"
+    oled: "<1ms pixel transition time"
+    implications:
+      - "Fast-moving content can blur on slower displays"
+      - "Response time affects perceived smoothness"
+
+# ============================================================================
+# USAGE NOTES FOR AGENTS
+# ============================================================================
+
+usage_guidelines:
+  for_perception_agent:
+    - "Use this as reference when classifying constraints"
+    - "If constraint matches entry here = PHYSICS"
+    - "If constraint has no physics basis = CONSTRUCT"
+    - "Quantitative values help validate claims"
+    
+  for_architecture_agent:
+    - "Design solutions that work WITH these constraints"
+    - "Use workarounds/implications as architectural guidance"
+    - "Don't try to violate physics - work around elegantly"
+    
+  for_execution_agent:
+    - "Use these values to validate performance claims"
+    - "If measured value exceeds physics = measurement error"
+    - "If optimization violates physics = delusion"
+    
+  updating_this_file:
+    - "Add new physics constraints as discovered"
+    - "Include quantitative values whenever possible"
+    - "Cite sources for non-obvious physics"
+    - "Focus on constraints real systems encounter"

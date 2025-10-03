@@ -1,0 +1,613 @@
+# ============================================================================
+# HUMAN CONSTRUCTS DATABASE
+# ============================================================================
+# Artificial patterns, conventions, and constructs created by humans
+# These are choices, not physics - they can be questioned, changed, or eliminated
+# Last Updated: 2025-10-01
+# Purpose: Reference data for distinguishing arbitrary from necessary
+# ============================================================================
+
+version: "1.0"
+description: "Human-created patterns, conventions, and organizational structures"
+
+# ============================================================================
+# ARCHITECTURAL PATTERNS
+# ============================================================================
+
+architectural_patterns:
+  microservices:
+    type: "CONSTRUCT"
+    description: "Decomposing application into small, independently deployable services"
+    rationale: "Independent scaling, team autonomy, technology diversity"
+    physics_cost:
+      - "Network latency between services (10-100ms per hop)"
+      - "Distributed system complexity (CAP theorem, eventual consistency)"
+      - "Increased operational overhead (deployment, monitoring, debugging)"
+    physics_benefit:
+      - "Horizontal scaling easier (distribute load across machines)"
+      - "Fault isolation (one service failure doesn't kill entire system)"
+    alternatives:
+      - "Modular monolith (same boundaries, no network cost)"
+      - "Service-oriented architecture (fewer, larger services)"
+      - "Selective extraction (only split proven bottlenecks)"
+    when_justified:
+      - "Proven independent scaling needs"
+      - "Team size >50 engineers"
+      - "Genuinely independent deployment requirements"
+    when_cargo_cult:
+      - "Premature optimization (no scaling problem yet)"
+      - "Small teams (<10 people)"
+      - "Tight coupling between 'services' (defeating the purpose)"
+  
+  mvc_mvvm_mvp:
+    type: "CONSTRUCT"
+    description: "Separating Model, View, Controller/ViewModel/Presenter"
+    rationale: "Separation of concerns, testability, code organization"
+    physics_cost:
+      - "Additional abstraction layers (marginal CPU/memory)"
+      - "Code navigation complexity (jumping between files)"
+    physics_benefit:
+      - "None directly (organizational benefit only)"
+    alternatives:
+      - "Single-file components (React/Vue style)"
+      - "Domain-driven design"
+      - "Feature-based organization"
+    when_justified:
+      - "Large applications (>100k LOC)"
+      - "Multiple UI platforms sharing logic"
+      - "Team familiar with pattern"
+    when_cargo_cult:
+      - "Small applications (<10k LOC)"
+      - "Pattern followed dogmatically despite friction"
+      - "Over-abstracted (too many layers)"
+  
+  layered_architecture:
+    type: "CONSTRUCT"
+    description: "Presentation → Business Logic → Data Access → Database"
+    rationale: "Separation of concerns, modularity"
+    physics_cost:
+      - "Data must traverse all layers (serialization overhead)"
+      - "Cannot optimize cross-layer (e.g., database query from UI)"
+    physics_benefit:
+      - "None directly (organizational benefit)"
+    alternatives:
+      - "Vertical slice architecture (feature-based)"
+      - "Direct data access where appropriate"
+      - "Hybrid (layers where useful, direct where not)"
+    when_justified:
+      - "Complex business logic requiring isolation"
+      - "Multiple data sources requiring abstraction"
+    when_cargo_cult:
+      - "Simple CRUD operations forced through layers"
+      - "Layers add no value (thin pass-through)"
+  
+  event_driven_architecture:
+    type: "CONSTRUCT"
+    description: "Components communicate via events/messages"
+    rationale: "Loose coupling, async processing, scalability"
+    physics_cost:
+      - "Message queue latency (1-50ms per hop)"
+      - "Eventual consistency complexity"
+      - "Debugging distributed flows is harder"
+    physics_benefit:
+      - "Async processing (don't block on slow operations)"
+      - "Natural load leveling (queue absorbs spikes)"
+    alternatives:
+      - "Direct function calls (synchronous)"
+      - "HTTP APIs (simpler mental model)"
+      - "Hybrid (events for truly async, sync for immediate)"
+    when_justified:
+      - "Genuinely async operations (email, reports, batch)"
+      - "High variability in load (queue smooths peaks)"
+      - "Integration with external systems"
+    when_cargo_cult:
+      - "Everything is an event (including immediate responses)"
+      - "Added for 'scalability' without measurement"
+
+# ============================================================================
+# DESIGN PATTERNS
+# ============================================================================
+
+design_patterns:
+  singleton:
+    type: "CONSTRUCT"
+    description: "Ensure class has only one instance globally"
+    rationale: "Global access point, controlled instantiation"
+    physics_cost:
+      - "Global state (testing harder, concurrency issues)"
+      - "Hidden dependencies (implicit coupling)"
+    physics_benefit:
+      - "None (can achieve same with dependency injection)"
+    alternatives:
+      - "Dependency injection (explicit dependencies)"
+      - "Module-level instance (simpler)"
+      - "Multiple instances when appropriate"
+    when_justified:
+      - "Truly global resource (logger, config loader)"
+      - "External constraint (database connection pool)"
+    when_cargo_cult:
+      - "Used as global variable replacement"
+      - "Forces single instance when multiple would work"
+  
+  factory_pattern:
+    type: "CONSTRUCT"
+    description: "Object creation delegated to factory method/class"
+    rationale: "Encapsulate creation logic, support polymorphism"
+    physics_cost:
+      - "Indirection (one more layer to understand)"
+      - "Runtime polymorphism (virtual dispatch overhead ~1-2 cycles)"
+    physics_benefit:
+      - "None directly (organizational flexibility)"
+    alternatives:
+      - "Direct instantiation (new/constructor)"
+      - "Builder pattern (for complex objects)"
+      - "Functions returning objects"
+    when_justified:
+      - "Complex object creation logic"
+      - "Runtime polymorphism genuinely needed"
+    when_cargo_cult:
+      - "Simple objects wrapped in factory for no reason"
+      - "Over-engineered (factory factory factory)"
+  
+  observer_pattern:
+    type: "CONSTRUCT"
+    description: "One-to-many dependency, observers notified of changes"
+    rationale: "Loose coupling, event-driven updates"
+    physics_cost:
+      - "Memory overhead (maintaining observer lists)"
+      - "Potential memory leaks (dangling observers)"
+    physics_benefit:
+      - "Reduces polling (event-driven is efficient)"
+    alternatives:
+      - "Direct callbacks (simpler)"
+      - "Event emitters (language-level support)"
+      - "Reactive streams (more powerful)"
+    when_justified:
+      - "Genuinely need 1-to-many notifications"
+      - "Observers added/removed dynamically"
+    when_cargo_cult:
+      - "Used for simple 1-to-1 callbacks"
+      - "Over-abstracted (could just call a function)"
+
+# ============================================================================
+# PROGRAMMING PARADIGMS
+# ============================================================================
+
+programming_paradigms:
+  object_oriented:
+    type: "CONSTRUCT"
+    description: "Organizing code around objects with state and behavior"
+    rationale: "Encapsulation, inheritance, polymorphism"
+    physics_cost:
+      - "Indirection (virtual dispatch ~1-2 cycles)"
+      - "Memory overhead (vtables, object headers)"
+    physics_benefit:
+      - "None directly (runtime equivalent to procedural)"
+    alternatives:
+      - "Procedural (functions + data structures)"
+      - "Functional (pure functions, immutability)"
+      - "Data-oriented (optimize for cache/memory layout)"
+    when_justified:
+      - "Domain naturally models as objects (GUI widgets, game entities)"
+      - "Team expertise in OOP"
+      - "Polymorphism genuinely simplifies design"
+    when_cargo_cult:
+      - "Everything is an object (even simple data)"
+      - "Deep inheritance hierarchies (fragile)"
+      - "Over-abstracted (interfaces with one implementation)"
+  
+  functional_programming:
+    type: "CONSTRUCT"
+    description: "Pure functions, immutability, avoiding side effects"
+    rationale: "Easier reasoning, parallelization, testing"
+    physics_cost:
+      - "Immutability = copying data (memory/CPU cost)"
+      - "Recursion can blow stack (vs iteration)"
+    physics_benefit:
+      - "Parallelization easier (no shared mutable state)"
+      - "Compiler optimizations (pure functions)"
+    alternatives:
+      - "Object-oriented"
+      - "Procedural"
+      - "Hybrid (functional where beneficial)"
+    when_justified:
+      - "Concurrent processing (immutability helps)"
+      - "Complex business logic (pure functions easier to reason about)"
+    when_cargo_cult:
+      - "Dogmatic immutability (unnecessary copying)"
+      - "Avoiding side effects in I/O-heavy code (impossible)"
+  
+  reactive_programming:
+    type: "CONSTRUCT"
+    description: "Data flows, streams, automatic propagation of changes"
+    rationale: "Declarative data flow, handles async elegantly"
+    physics_cost:
+      - "Mental complexity (steep learning curve)"
+      - "Memory overhead (maintaining subscriptions)"
+    physics_benefit:
+      - "Efficient event handling (vs polling)"
+    alternatives:
+      - "Callbacks (simpler mental model)"
+      - "Promises/async-await (more intuitive)"
+      - "Traditional event emitters"
+    when_justified:
+      - "Complex data flows with many dependencies"
+      - "Real-time updates (stock tickers, live feeds)"
+    when_cargo_cult:
+      - "Simple CRUD apps forced into reactive"
+      - "Used because 'modern' not because needed"
+
+# ============================================================================
+# FRAMEWORK CONVENTIONS
+# ============================================================================
+
+framework_conventions:
+  rails_convention_over_configuration:
+    type: "CONSTRUCT"
+    description: "Sensible defaults, standardized structure"
+    rationale: "Reduce decision fatigue, faster development"
+    physics_cost:
+      - "Implicit behavior (magic is hard to debug)"
+      - "Flexibility sacrificed for convention"
+    physics_benefit:
+      - "None directly (developer productivity benefit)"
+    alternatives:
+      - "Explicit configuration (more verbose but clearer)"
+      - "Lighter frameworks (Sinatra, Flask)"
+    when_justified:
+      - "Standard web app patterns"
+      - "Team values consistency over flexibility"
+    when_cargo_cult:
+      - "Fighting framework when needs don't fit"
+      - "Staying on framework due to sunk cost"
+  
+  rest_api_design:
+    type: "CONSTRUCT"
+    description: "Resources, HTTP verbs, stateless"
+    rationale: "Standardized interface, cacheable, stateless"
+    physics_cost:
+      - "HTTP overhead (headers, handshakes)"
+      - "Over-fetching/under-fetching (fixed endpoints)"
+    physics_benefit:
+      - "HTTP caching (leverage CDNs, browser cache)"
+      - "Stateless = easier horizontal scaling"
+    alternatives:
+      - "GraphQL (client-specified queries)"
+      - "gRPC (binary protocol, faster)"
+      - "RPC (remote procedure call)"
+      - "WebSockets (bidirectional, persistent)"
+    when_justified:
+      - "Public APIs (standardization matters)"
+      - "CRUD operations (natural fit)"
+      - "Leverage HTTP infrastructure"
+    when_cargo_cult:
+      - "Internal APIs (could be simpler)"
+      - "Real-time needs (WebSockets better)"
+      - "Following REST dogmatically (HATEOAS rarely used)"
+  
+  graphql:
+    type: "CONSTRUCT"
+    description: "Client specifies exactly what data it needs"
+    rationale: "Solve over-fetching/under-fetching, single endpoint"
+    physics_cost:
+      - "Query parsing overhead"
+      - "N+1 query problem (if not careful)"
+      - "Caching harder (queries are dynamic)"
+    physics_benefit:
+      - "Reduces unnecessary data transfer"
+    alternatives:
+      - "REST with field filtering"
+      - "Multiple specialized REST endpoints"
+      - "gRPC with streaming"
+    when_justified:
+      - "Diverse clients with different data needs"
+      - "Mobile apps (minimize data transfer)"
+    when_cargo_cult:
+      - "Simple CRUD (REST simpler)"
+      - "Internal APIs (unnecessary complexity)"
+
+# ============================================================================
+# ORGANIZATIONAL PATTERNS
+# ============================================================================
+
+organizational_patterns:
+  agile_scrum:
+    type: "CONSTRUCT"
+    description: "Sprints, standups, retrospectives, backlogs"
+    rationale: "Iterative development, adaptability, team collaboration"
+    physics_cost:
+      - "Meeting overhead (standups, planning, retros)"
+      - "Context switching (sprint boundaries)"
+    physics_benefit:
+      - "None directly (organizational process)"
+    alternatives:
+      - "Kanban (continuous flow)"
+      - "Shape Up (6-week cycles)"
+      - "Waterfall (for well-defined projects)"
+      - "Ad-hoc (for small teams)"
+    when_justified:
+      - "Uncertain requirements (need adaptability)"
+      - "Medium-large teams (need coordination)"
+    when_cargo_cult:
+      - "Ceremonies for ceremony's sake"
+      - "Rigid sprints for sake of 'being agile'"
+      - "Not adapting process based on feedback"
+  
+  code_review_requirements:
+    type: "CONSTRUCT"
+    description: "All code must be reviewed before merging"
+    rationale: "Catch bugs, knowledge sharing, maintain standards"
+    physics_cost:
+      - "Developer time (waiting for review)"
+      - "Context switching (reviewer interruption)"
+    physics_benefit:
+      - "Catches bugs before production (reduce incident cost)"
+    alternatives:
+      - "Pair programming (real-time review)"
+      - "Post-merge review (for low-risk changes)"
+      - "Automated checks + sampling (not everything)"
+      - "Trust + monitoring (move fast, fix issues)"
+    when_justified:
+      - "Critical systems (financial, medical)"
+      - "Junior developers (learning opportunity)"
+      - "High bug cost (hard to fix production issues)"
+    when_cargo_cult:
+      - "Trivial changes blocked for days"
+      - "Rubber-stamp reviews (no real value)"
+      - "Process over pragmatism"
+  
+  branch_protection_rules:
+    type: "CONSTRUCT"
+    description: "Cannot merge to main without approvals/CI passing"
+    rationale: "Prevent accidental breakage, enforce quality"
+    physics_cost:
+      - "Deployment delay (waiting for checks)"
+      - "Developer friction (blocked on CI/reviewers)"
+    physics_benefit:
+      - "Prevents broken builds (reduces incident recovery time)"
+    alternatives:
+      - "Trunk-based development (merge often, small changes)"
+      - "Feature flags (merge incomplete code, toggle on/off)"
+      - "Continuous deployment (trust automation)"
+    when_justified:
+      - "Multiple teams touching shared code"
+      - "High cost of production breaks"
+    when_cargo_cult:
+      - "Solo developer with branch protection"
+      - "Slow CI blocking progress (>30 min)"
+
+# ============================================================================
+# DEVELOPMENT METHODOLOGIES
+# ============================================================================
+
+development_methodologies:
+  test_driven_development:
+    type: "CONSTRUCT"
+    description: "Write test first, then implementation"
+    rationale: "Design clarity, test coverage, confidence"
+    physics_cost:
+      - "Slower initial development (writing tests first)"
+    physics_benefit:
+      - "Faster debugging (tests isolate issues)"
+      - "Reduces regression bugs"
+    alternatives:
+      - "Test-after (write tests after code)"
+      - "Test-where-valuable (not everything)"
+      - "Type systems (prevent certain bugs)"
+    when_justified:
+      - "Complex business logic"
+      - "High-value critical paths"
+      - "Refactoring legacy code (safety net)"
+    when_cargo_cult:
+      - "100% coverage mandate (diminishing returns)"
+      - "Testing trivial getters/setters"
+      - "Dogmatic TDD slowing progress"
+  
+  domain_driven_design:
+    type: "CONSTRUCT"
+    description: "Model software around business domain"
+    rationale: "Align code with business, ubiquitous language"
+    physics_cost:
+      - "Upfront modeling time"
+      - "Additional abstraction layers (bounded contexts, aggregates)"
+    physics_benefit:
+      - "None directly (organizational clarity)"
+    alternatives:
+      - "Data-driven design (model database first)"
+      - "Behavior-driven (model actions/use-cases)"
+      - "Pragmatic (model emerges through iteration)"
+    when_justified:
+      - "Complex domain (finance, healthcare)"
+      - "Long-lived systems (years of evolution)"
+      - "Multiple domain experts (shared language needed)"
+    when_cargo_cult:
+      - "Simple CRUD apps (over-engineered)"
+      - "Following DDD patterns without understanding domain"
+  
+  pair_programming:
+    type: "CONSTRUCT"
+    description: "Two developers, one computer, collaborate in real-time"
+    rationale: "Knowledge sharing, real-time review, fewer bugs"
+    physics_cost:
+      - "2× developer hours for 1× output (raw throughput)"
+      - "Tiring (intense focus required)"
+    physics_benefit:
+      - "Fewer bugs (catch mistakes immediately)"
+      - "Knowledge transfer (no single-person silos)"
+    alternatives:
+      - "Code review (async review)"
+      - "Mob programming (whole team)"
+      - "Solo + documentation (scale knowledge differently)"
+    when_justified:
+      - "Onboarding (teaching context)"
+      - "Complex problems (two perspectives valuable)"
+      - "High-risk changes (extra scrutiny)"
+    when_cargo_cult:
+      - "All work paired (exhausting, inflexible)"
+      - "Unbalanced pairs (one typing, one watching)"
+
+# ============================================================================
+# DATABASE PATTERNS
+# ============================================================================
+
+database_patterns:
+  normalized_schema:
+    type: "CONSTRUCT"
+    description: "3NF normalization, minimize redundancy"
+    rationale: "Data consistency, reduce storage, update anomalies"
+    physics_cost:
+      - "Joins required (CPU + I/O cost)"
+      - "More complex queries"
+    physics_benefit:
+      - "Less storage (deduplicated data)"
+      - "Write efficiency (update one place)"
+    alternatives:
+      - "Denormalized (duplicate data for read speed)"
+      - "Hybrid (normalize where writes matter, denormalize for reads)"
+    when_justified:
+      - "Write-heavy workloads"
+      - "Data consistency critical"
+      - "Storage expensive"
+    when_cargo_cult:
+      - "Read-heavy workloads (joins killing performance)"
+      - "Following normalization rules blindly"
+  
+  orm_active_record:
+    type: "CONSTRUCT"
+    description: "Object-relational mapping, objects = database rows"
+    rationale: "Database abstraction, productivity, type safety"
+    physics_cost:
+      - "N+1 query problem (hidden inefficiency)"
+      - "Impedance mismatch (objects ≠ relations)"
+      - "Cannot use advanced SQL features easily"
+    physics_benefit:
+      - "Development speed (less SQL writing)"
+    alternatives:
+      - "Raw SQL (full control, verbose)"
+      - "Query builders (middle ground)"
+      - "Stored procedures (database-side logic)"
+    when_justified:
+      - "Standard CRUD operations"
+      - "Rapid development priority"
+    when_cargo_cult:
+      - "Complex queries forced through ORM (slow)"
+      - "Fighting ORM instead of using SQL"
+
+# ============================================================================
+# SECURITY PATTERNS
+# ============================================================================
+
+security_patterns:
+  oauth2_openid:
+    type: "CONSTRUCT"
+    description: "Delegated authorization, federated identity"
+    rationale: "Don't store passwords, single sign-on, scoped access"
+    physics_cost:
+      - "Complexity (token flows, refresh logic)"
+      - "Network dependency (auth server must be available)"
+    physics_benefit:
+      - "Centralized auth (easier to secure one system)"
+    alternatives:
+      - "Session-based auth (simpler, server state)"
+      - "JWT (stateless, self-contained)"
+      - "API keys (simple, no user context)"
+    when_justified:
+      - "Third-party integrations"
+      - "Multiple applications (SSO)"
+      - "Mobile apps (refresh tokens)"
+    when_cargo_cult:
+      - "Simple internal apps (session auth simpler)"
+      - "Over-complicated for use case"
+  
+  role_based_access_control:
+    type: "CONSTRUCT"
+    description: "Users assigned roles, roles have permissions"
+    rationale: "Manage permissions at scale"
+    physics_cost:
+      - "Additional database queries (check permissions)"
+      - "Complexity (role hierarchies)"
+    physics_benefit:
+      - "None directly (organizational scaling)"
+    alternatives:
+      - "Attribute-based (more flexible)"
+      - "Simple boolean flags (for few permissions)"
+      - "Code-level checks (hardcoded)"
+    when_justified:
+      - "Many users, many permissions"
+      - "Audit requirements"
+    when_cargo_cult:
+      - "3 users, 2 roles (over-engineered)"
+
+# ============================================================================
+# CODING CONVENTIONS
+# ============================================================================
+
+coding_conventions:
+  clean_code_principles:
+    type: "CONSTRUCT"
+    description: "Meaningful names, small functions, DRY, etc."
+    rationale: "Readability, maintainability"
+    physics_cost:
+      - "None directly (same compiled output)"
+    physics_benefit:
+      - "None directly (human readability benefit)"
+    alternatives:
+      - "Different conventions (K&R, Google style, etc.)"
+      - "No conventions (chaos)"
+    when_justified:
+      - "Always (readability always matters)"
+      - "But: Pragmatism over dogma"
+    when_cargo_cult:
+      - "Refactoring working code for 'cleanliness'"
+      - "Functions so small they obscure logic"
+      - "Abstraction for abstraction's sake"
+  
+  dont_repeat_yourself:
+    type: "CONSTRUCT"
+    description: "Every piece of knowledge should have single representation"
+    rationale: "Easier maintenance, consistency"
+    physics_cost:
+      - "Abstraction overhead (indirection)"
+    physics_benefit:
+      - "None directly (maintenance benefit)"
+    alternatives:
+      - "Accept some duplication (simpler)"
+      - "Rule of Three (abstract after 3rd duplication)"
+    when_justified:
+      - "Identical logic in multiple places"
+      - "Duplication causes real maintenance pain"
+    when_cargo_cult:
+      - "Premature abstraction (code not stabilized)"
+      - "Coupling unrelated code (coincidental similarity)"
+
+# ============================================================================
+# USAGE NOTES FOR AGENTS
+# ============================================================================
+
+usage_guidelines:
+  for_perception_agent:
+    - "Use this to identify CONSTRUCT constraints"
+    - "If constraint is a pattern from this file = CONSTRUCT"
+    - "Mark confidence based on how arbitrary the pattern is"
+    
+  for_architecture_agent:
+    - "Question necessity of each construct"
+    - "Calculate physics cost vs organizational benefit"
+    - "Suggest simpler alternatives when appropriate"
+    
+  for_execution_agent:
+    - "Measure if construct is actually helping performance"
+    - "Flag constructs that add overhead without benefit"
+    
+  important_nuance:
+    - "CONSTRUCT ≠ BAD"
+    - "Many constructs are useful organizational tools"
+    - "The point: They're CHOICES, not REQUIREMENTS"
+    - "Can be questioned, adapted, or replaced"
+    - "Should be evaluated based on actual value, not dogma"
+    
+  updating_this_file:
+    - "Add new constructs as encountered"
+    - "Include both benefits and costs"
+    - "Be fair: constructs often have good reasons"
+    - "Focus on distinguishing choice from necessity"
