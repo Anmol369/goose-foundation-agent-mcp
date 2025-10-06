@@ -365,25 +365,6 @@ Foundation Agent helps you validate reality BEFORE architecting solutions. The g
 
 ---
 
-## 🗺️ Roadmap
-
-### v1.0 (Current)
-- ✅ 4-phase sequential validation
-- ✅ 3 knowledge bases (1,457 lines)
-- ✅ 4 specialist agents
-- ✅ Goose integration (additive, non-breaking)
-
-### v1.2 (Next 3 months)
-- ⏳ Performance optimization (26 min → 18 min)
-- ⏳ Parallel constraint validation
-- ⏳ Custom knowledge base support
-- ⏳ Domain-specific physics (mobile, embedded, ML)
-
-### v2.0 (Next 6 months)
-- 🔮 Real-time validation (streaming mode)
-- 🔮 Multi-language support beyond YAML
-- 🔮 Visual constraint graphs
-- 🔮 Team collaboration features
 
 ---
 
